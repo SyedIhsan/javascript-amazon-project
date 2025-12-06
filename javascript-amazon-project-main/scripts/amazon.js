@@ -1,4 +1,4 @@
-import { addToCart, updateCartQuantity } from "../data/cart.js";
+import { cart, addToCart, updateCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productsHTML = "";
@@ -64,4 +64,5 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
     addToCart(productId);
     updateCartQuantity();
   });
+  console.log(cart)
 });
