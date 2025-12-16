@@ -1,4 +1,4 @@
-import { cart, removeFromCart } from "../data/cart.js";
+import { cart, removeFromCart, updateDeliveryOption } from "../data/cart.js";
 import { products } from "../data/products.js"; // named export
 import formatCurrency from "./utils/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js"; // default export
@@ -66,14 +66,14 @@ cart.forEach((cartItem, i) => {
                 <div class="delivery-options-title">
                     Choose a delivery option:
                 </div>
-                ${deliveryOptionsHTML(i, cartItem)}
+                ${deliveryOptionsHTML(matchingProduct, cartItem)}
                 </div>
             </div>
             </div>
     `;
 });
 
-function deliveryOptionsHTML(i, cartItem) {
+function deliveryOptionsHTML(matchingProduct, cartItem) {
     let html = "";
     deliveryOptions.forEach((deliveryOption) => {
         const today = dayjs();
@@ -82,11 +82,11 @@ function deliveryOptionsHTML(i, cartItem) {
         const priceString = deliveryOption.priceCents === 0 ? "FREE Shipping" : `$${formatCurrency(deliveryOption.priceCents)} - Shipping`;
         const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
         html += `
-        <div class="delivery-option">
+        <div class="delivery-option" data-product-id="${matchingProduct.id}" data-delivery-option-id="${deliveryOption.id}">
             <input type="radio"
             ${isChecked ? "checked" : ""}
             class="delivery-option-input"
-            name="delivery-option-${i}">
+            name="delivery-option-${matchingProduct.id}">
             <div>
             <div class="delivery-option-date">
                 ${dateString}
@@ -109,6 +109,13 @@ document.querySelectorAll(".delete-quantity-link").forEach((button) => {
         removeFromCart(productId);
         const cartContainer = document.querySelector(`.cart-item-container-${productId}`);
         cartContainer.remove();
+    });
+});
+
+document.querySelectorAll(".delivery-option").forEach((element) => {
+    element.addEventListener("click", () => {
+        const { productId, deliveryOptionId } = element.dataset;
+        updateDeliveryOption(productId, deliveryOptionId);
     });
 });
 
