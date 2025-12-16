@@ -1,6 +1,6 @@
-import { cart, addToCart, updateCartQuantity } from "../data/cart.js";
+import { addToCart, updateCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js"; // ../ outside folder
-import { formatCurrency } from "./utils/money.js"; // ./ current folder
+import formatCurrency from "./utils/money.js"; // ./ current folder
 
 let productsHTML = "";
 updateCartQuantity();

@@ -16,6 +16,7 @@ export function addToCart(productId) {
     cart.push({
       productId: productId,
       quantity: Number(quantitySelector),
+      deliveryOptionId: "1",
     });
   };
 
