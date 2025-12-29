@@ -1,6 +1,12 @@
-export let cart = JSON.parse(localStorage.getItem("cart")) || [];
+export let cart;
 
-export function addToCart(productId) {
+loadFromStorage();
+
+export function loadFromStorage() {
+  cart = JSON.parse(localStorage.getItem("cart")) || [];
+};
+
+export function addToCart(productId, quantitySelector) {
   let matchingItem;
 
   cart.forEach((cartItem) => {
@@ -9,13 +15,12 @@ export function addToCart(productId) {
     };
   });
 
-  let quantitySelector = document.querySelector(`.quantity-selector-${productId}`).value
   if (matchingItem) {
-    matchingItem.quantity += Number(quantitySelector);
+    matchingItem.quantity += Number(quantitySelector) || 1;
   } else {
     cart.push({
       productId: productId,
-      quantity: Number(quantitySelector),
+      quantity: Number(quantitySelector) || 1,
       deliveryOptionId: "1",
     });
   };
