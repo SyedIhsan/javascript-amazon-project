@@ -56,6 +56,33 @@ class Clothing extends Product {
   }
 }
 
+/*
+const date = new Date();
+console.log(date);
+console.log(date.toLocaleTimeString());
+
+console.log(this);
+
+const object2 = {
+  a: 2,
+  b: this.a
+};
+
+function logThis() {
+  console.log(this);
+}
+
+logThis();
+logThis.call(true); // adds extra param in front
+
+const object3 = {
+  method: () => { // Arrow functions do not change the value of "this"
+    console.log(this);
+  }
+};
+object3.method();
+*/
+
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -721,3 +748,11 @@ export const products = [
   }
   return new Product(productDetails);
 });
+
+/*
+Summary of "this"
+
+1. Inside a method, "this" points to the outer object
+2. Inside a function, this = undefined (But we can change it)
+3. Arrow functions, do not change the value of "this"
+*/
