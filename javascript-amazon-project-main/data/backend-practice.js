@@ -11,9 +11,9 @@ xhr.send();
 Type of requests:
 
 GET = get some information from the backend
-POST
-PUT
-DELETE
+POST = create something (send data to the backend)
+PUT = update something
+DELETE = delete something
 
 URL = Uniform Resource Locator
 
