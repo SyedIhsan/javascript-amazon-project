@@ -1,3 +1,5 @@
+import formatCurrency from "../scripts/utils/money.js";
+
 export function getProduct(productId) {
   let matchingProduct;
     
@@ -10,6 +12,98 @@ export function getProduct(productId) {
   return matchingProduct;
 };
 
+class Product {
+  id;
+  image;
+  name;
+  rating;
+  priceCents;
+
+  constructor(productDetails) {
+    this.id = productDetails.id;
+    this.image = productDetails.image;
+    this.name = productDetails.name;
+    this.rating = productDetails.rating;
+    this.priceCents = productDetails.priceCents;
+  }
+
+  getStarsUrl() {
+    return `images/ratings/rating-${this.rating.stars * 10}.png`;
+  }
+
+  getPrice() {
+    return `$${formatCurrency(this.priceCents)}`;
+  }
+
+  extraInfoHTML() {
+    return "";
+  }
+}
+
+class Clothing extends Product {
+  sizeChartLink;
+
+  constructor(productDetails) {
+    super(productDetails); // Calls the constructor of the parent class(Product)
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  extraInfoHTML() { // Method overriding
+    // super.extraInfoHTML(); // Calls the method of the parent class
+    return `
+      <a href="${this.sizeChartLink}" target="_blank">Size Chart</a>
+    `;
+  }
+}
+
+/*
+const date = new Date();
+console.log(date);
+console.log(date.toLocaleTimeString());
+
+console.log(this);
+
+const object2 = {
+  a: 2,
+  b: this.a
+};
+
+function logThis() {
+  console.log(this);
+}
+
+logThis();
+logThis.call(true); // adds extra param in front
+
+const object3 = {
+  method: () => { // Arrow functions do not change the value of "this"
+    console.log(this);
+  }
+};
+object3.method();
+*/
+
+export let products = [];
+
+export function loadProducts (fun) {
+  const xhr = new XMLHttpRequest();
+
+  xhr.addEventListener("load", () => {
+    products = JSON.parse(xhr.response).map((productDetails) => {
+      if (productDetails.type === "clothing") {
+        return new Clothing(productDetails);
+      }
+      return new Product(productDetails);
+    });
+    console.log("load products");
+    fun();
+  });
+
+  xhr.open("GET", "https://supersimplebackend.dev/products");
+  xhr.send(); 
+};
+
+/*
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -54,7 +148,7 @@ export const products = [
       "apparel",
       "mens"
     ],
-    type: "clothing",
+    type: "clothing", // Discriminator Property
     sizeChartLink: "images/clothing-size-chart.png"
   },
   {
@@ -669,4 +763,18 @@ export const products = [
       "mens"
     ]
   }
-];
+].map((productDetails) => {
+  if (productDetails.type === "clothing") {
+    return new Clothing(productDetails);
+  }
+  return new Product(productDetails);
+});
+*/
+
+/*
+Summary of "this"
+
+1. Inside a method, "this" points to the outer object
+2. Inside a function, this = undefined (But we can change it)
+3. Arrow functions, do not change the value of "this"
+*/
