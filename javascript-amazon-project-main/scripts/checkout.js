@@ -6,13 +6,22 @@ import { renderPaymentSummary } from "./checkout/paymentSummary.js";
 // import "../data/backend-practice.js";
 
 async function loadPage() { // async = makes a function return a promise
-  await loadProductsFetch();
+  // Error Handling
+  try {
+    // throw "error1"; - manually create an error
 
-  await new Promise((resolve) => {
-    loadCart(() => {
-      resolve();
+    await loadProductsFetch();
+  
+    const value = await new Promise((resolve, reject) => {
+      // throw "error2"; - 1st way to create an error in a promise
+      loadCart(() => {
+        // reject("error3"); - (2nd way) create an error in the future
+        resolve("value3");
+      });
     });
-  });
+  } catch (error) {
+    console.log("Unexpected error. Please try again later.");
+  }
 
   renderOrderSummary();
   renderPaymentSummary();
@@ -71,4 +80,7 @@ await = lets us wait for a promise to finish, before going to the next line
 
 We can only use await, when we're inside an async function
 async await can only be used with promises
+
+try/catch = can be used to catch errors in normal code
+it's meant to handle unexpected errors (code is correct, outside our control)
 */
